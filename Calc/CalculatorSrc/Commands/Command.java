@@ -1,13 +1,10 @@
 package Commands;
 
-import java.util.ArrayList;
+import java.util.List;
 import Context.CalcContext;
-import Exceptions.ArgExceptions;
-import Exceptions.MathExceptions;
-import Exceptions.StackExceptions;
+import Exceptions.MyException;
 
 
 public interface Command {
-
-    public void execute(CalcContext context, ArrayList<String> args) throws MathExceptions, StackExceptions, ArgExceptions;
+    void execute(CalcContext context, List<String> args) throws MyException;
 }

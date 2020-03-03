@@ -1,19 +1,13 @@
 package Commands;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import Context.CalcContext;
-import Exceptions.ArgExceptions;
+import Exceptions.MyException;
 
-public class PushCommand implements Command{
+public class PushCommand implements Command {
 
     @Override
-    public void execute(CalcContext context, ArrayList<String> args) throws ArgExceptions {
-        try {
-            Double x = Double.parseDouble(args.get(0));
-            context.push(x);
-        } catch (NumberFormatException e) {
-            context.push(args.get(0));
-        }
+    public void execute(CalcContext context, List<String> args) throws MyException {
+        context.push(args.get(0));
     }
 }

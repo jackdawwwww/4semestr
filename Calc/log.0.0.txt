@@ -1,0 +1,84 @@
+мар. 03, 2020 11:43:07 AM MyLog getIfo
+INFO: Start calculating
+мар. 03, 2020 11:43:37 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:43:38 AM MyLog getIfo
+INFO: Start 'PUSH [3]'
+мар. 03, 2020 11:44:10 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:44:18 AM MyLog getIfo
+INFO: Start 'DEFINE [a, 5]'
+мар. 03, 2020 11:44:34 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:44:37 AM MyLog getIfo
+INFO: Start '+ null'
+мар. 03, 2020 11:44:38 AM MyLog error
+INFO: Command Exception: Stack is empty
+мар. 03, 2020 11:45:10 AM MyLog getIfo
+INFO: Start calculating
+мар. 03, 2020 11:45:17 AM MyLog getIfo
+INFO: Start calculating
+мар. 03, 2020 11:45:26 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:45:26 AM MyLog getIfo
+INFO: Start 'PUSH [4]'
+мар. 03, 2020 11:45:31 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:45:31 AM MyLog getIfo
+INFO: Start 'DEFINE [a, 3]'
+мар. 03, 2020 11:45:36 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:45:36 AM MyLog getIfo
+INFO: Start 'PUSH [a]'
+мар. 03, 2020 11:45:40 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:45:40 AM MyLog getIfo
+INFO: Start 'PRINT null'
+мар. 03, 2020 11:45:49 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:45:49 AM MyLog getIfo
+INFO: Start '/ null'
+мар. 03, 2020 11:45:55 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:45:55 AM MyLog getIfo
+INFO: Start 'PRINT null'
+мар. 03, 2020 11:46:08 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:46:08 AM MyLog getIfo
+INFO: Start 'PUSH [0]'
+мар. 03, 2020 11:46:11 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:46:11 AM MyLog getIfo
+INFO: Start '/ null'
+мар. 03, 2020 11:46:28 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:46:28 AM MyLog getIfo
+INFO: Start 'PRUNT null'
+мар. 03, 2020 11:52:56 AM MyLog getIfo
+INFO: Start calculating
+мар. 03, 2020 11:53:00 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:53:00 AM MyLog getIfo
+INFO: Start 'PUSH [2]'
+мар. 03, 2020 11:53:04 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:53:04 AM MyLog getIfo
+INFO: Start 'PUSH [3]'
+мар. 03, 2020 11:53:05 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:53:05 AM MyLog getIfo
+INFO: Start '+ null'
+мар. 03, 2020 11:53:22 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:53:22 AM MyLog getIfo
+INFO: Start 'PRINT null'
+мар. 03, 2020 11:53:29 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:53:29 AM MyLog getIfo
+INFO: Start 'PUSH [0]'
+мар. 03, 2020 11:53:31 AM MyLog getIfo
+INFO: Start parsing
+мар. 03, 2020 11:53:31 AM MyLog getIfo
+INFO: Start '/ null'
+мар. 03, 2020 11:53:31 AM MyLog error
+INFO: MathException: Division by zero

@@ -1,11 +1,9 @@
-import Exceptions.ArgExceptions;
+import Exceptions.MyException;
+
 
 public class Main {
 
-    public static void main(String[] args) throws ArgExceptions {
-        if (args.length > 1) {
-
-        }
+    public static void main(String[] args) throws MyException, ClassNotFoundException {
         String inputName = "";
 
         if (args.length == 1)

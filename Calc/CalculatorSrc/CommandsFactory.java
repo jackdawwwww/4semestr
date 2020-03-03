@@ -1,4 +1,5 @@
 import Commands.Command;
+import Exceptions.InvalidCommandExceptions;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +9,7 @@ public class CommandsFactory {
     private static CommandsFactory commandsFactory;
     private final Properties properties = new Properties();
 
-    private CommandsFactory() {
+    CommandsFactory() {
         try {
             properties.load(Calc.class.getResourceAsStream("commands.properties"));
         } catch (IOException e) {
@@ -25,10 +26,11 @@ public class CommandsFactory {
 
     public Command getCommand(String commandName) throws ClassNotFoundException {
         Command command = null;
-
+        String  name;
         try {
-            command = (Command) Class.forName(properties.getProperty(commandName)).getDeclaredConstructor().newInstance();
-        } catch (InstantiationException e) {
+            if ((name = properties.getProperty(commandName)) == null) throw new InvalidCommandExceptions(commandName);
+            command = (Command) Class.forName(name).getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | InvalidCommandExceptions e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();

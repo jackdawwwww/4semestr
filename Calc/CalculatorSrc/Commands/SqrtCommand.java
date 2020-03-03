@@ -1,16 +1,22 @@
 package Commands;
 
-import java.util.ArrayList;
+import java.util.List;
 import Context.CalcContext;
-import Exceptions.StackExceptions;
+import Exceptions.MyException;
+import Exceptions.NegativeSQRT;
+
 
 public class SqrtCommand implements Command {
 
     @Override
-    public void execute(CalcContext context, ArrayList<String> args) throws StackExceptions {
+    public void execute(CalcContext context, List<String> args) throws MyException {
         Double x = context.pop();
-        if (x < 0) throw new StackExceptions("SQRT from negative number");
-        x = Math.sqrt(x);
-        context.push(x);
+
+        if (x >= 0) {
+            x = Math.sqrt(x);
+            context.push(x);
+        }
+
+        else throw new NegativeSQRT(x.toString());
     }
 }

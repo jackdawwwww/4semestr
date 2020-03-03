@@ -1,14 +1,13 @@
 package Commands;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import Context.CalcContext;
-import Exceptions.StackExceptions;
+import Exceptions.MyException;
 
 public class PopCommand implements Command {
 
     @Override
-    public void execute(CalcContext context, ArrayList<String> args) throws StackExceptions {
+    public void execute(CalcContext context, List<String> args) throws MyException {
         context.pop();
     }
 }

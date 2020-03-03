@@ -1,21 +1,24 @@
 package Commands;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import Context.CalcContext;
-import Exceptions.MathExceptions;
-import Exceptions.StackExceptions;
+import Exceptions.DivisionByZero;
+import Exceptions.MyException;
+
 
 public class DivisionCommand implements Command {
 
     @Override
-    public void execute(CalcContext context, ArrayList<String> args) throws MathExceptions, StackExceptions {
-        double y = 0.0, x = 0.0;
+    public void execute(CalcContext context, List<String> args) throws MyException {
+        double y, x;
 
-        y = context.pop();
         x = context.pop();
+        y = context.pop();
 
-        if ( x == 0 ) throw new MathExceptions("Division by zero");
-        context.push(x/y);
+        if ( x != 0 )
+        context.push(y/x);
+
+        else throw new DivisionByZero();
     }
 }

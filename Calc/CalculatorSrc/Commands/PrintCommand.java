@@ -1,13 +1,12 @@
 package Commands;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import Context.CalcContext;
 
 public class PrintCommand implements Command {
 
     @Override
-    public void execute(CalcContext context, ArrayList<String> args) {
+    public void execute(CalcContext context, List<String> args) {
        context.print();
     }
 }

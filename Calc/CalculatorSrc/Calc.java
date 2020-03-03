@@ -1,36 +1,52 @@
+import Commands.Command;
 import Context.CalcContext;
-import Exceptions.ArgExceptions;
+import Exceptions.MyException;
 
 import java.util.*;
 
 
 public class Calc {
+    private static final MyLog log = new MyLog();
 
     CalcContext context;
+    CommandsFactory commandsFactory;
 
     public Calc() {
         context = new CalcContext();
+        commandsFactory = new CommandsFactory();
     }
-    public void calculate(String fileName) throws ArgExceptions {
-        Scanner scanner = fileName.equals("") ? new Scanner(System.in) : new Scanner(fileName);
+    public void calculate(String fileName) throws MyException, ClassNotFoundException {
 
-        while (scanner.hasNextLine()) {
-            String commandName;
-            List<String> args;
-            List<String> words = Arrays.asList(scanner.nextLine().split(" "));
+        try {
+            Scanner scanner = fileName.equals("") ? new Scanner(System.in) : new Scanner(fileName);
+            log.getIfo("Start calculating");
 
-            commandName = words.get(0);
+            while (scanner.hasNextLine()) {
+                log.getIfo("Start parsing");
 
-            if (commandName == "SQRT" || commandName == "POP" || commandName == "PRINT") {
-                if (words.size() > 1) throw new ArgExceptions("Unnecessary args for " + commandName);
-                else continue;
+                String commandName;
+                List<String> args = null;
+                List<String> words = Arrays.asList(scanner.nextLine().split(" "));
+
+                commandName = words.get(0);
+
+                if (words.size() > 1)
+                    args = words.subList(1, words.size());
+
+                log.getIfo("Start '" + commandName + " " + (args.isEmpty() ? "" : args) + "'");
+
+                Command com = commandsFactory.getCommand(commandName);
+                com.execute(context, args);
+
+                log.getIfo("Successful '" + commandName + " " + (args.isEmpty() ? "" : args) + "'");
             }
-            if (commandName == "DEFINE")
-                if (words.size() != 3) throw new ArgExceptions("No args for " + commandName);
-
-            else if (words.size() != 2) throw new ArgExceptions("Invalid count of args for " + commandName);
-
-            args = words.subList(1, words.size() - 1);
+            if (!context.isEmpty()) {
+                log.getIfo("Result is: ");
+                context.print();
+            }
+            log.getIfo("Successful calculating");
+        } catch (MyException e){
+            log.error(e);
         }
     }
 

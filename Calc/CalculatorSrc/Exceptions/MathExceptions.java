@@ -1,7 +1,9 @@
 package Exceptions;
 
-public class MathExceptions extends Exception {
+public class MathExceptions extends MyException {
     public MathExceptions(String what) {
         super("MathException: " + what);
     }
 }
+
+
