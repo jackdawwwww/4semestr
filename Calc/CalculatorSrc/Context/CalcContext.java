@@ -53,8 +53,12 @@ public class CalcContext {
 
     public boolean isEmpty() { return stack.isEmpty(); }
 
+    public int size() { return stack.size(); }
+
     public void print() {
         if (stack.isEmpty()) throw new EmptyStackException();
         System.out.println(stack.peek());
     }
+
+
 }

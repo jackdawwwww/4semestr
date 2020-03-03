@@ -11,7 +11,7 @@ public class CommandsFactory {
 
     CommandsFactory() {
         try {
-            properties.load(Calc.class.getResourceAsStream("commands.properties"));
+            properties.load(Calculator.class.getResourceAsStream("commands.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }

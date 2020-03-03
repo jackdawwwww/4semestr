@@ -82,3 +82,9 @@ INFO: Start parsing
 INFO: Start '/ null'
 мар. 03, 2020 11:53:31 AM MyLog error
 INFO: MathException: Division by zero
+мар. 03, 2020 7:40:39 PM MyLog getIfo
+INFO: Start calculating
+мар. 03, 2020 7:40:57 PM MyLog getIfo
+INFO: Start calculating
+мар. 03, 2020 7:41:23 PM MyLog getIfo
+INFO: Start calculating

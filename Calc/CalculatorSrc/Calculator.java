@@ -5,13 +5,13 @@ import Exceptions.MyException;
 import java.util.*;
 
 
-public class Calc {
+public class Calculator {
     private static final MyLog log = new MyLog();
 
     CalcContext context;
     CommandsFactory commandsFactory;
 
-    public Calc() {
+    public Calculator() {
         context = new CalcContext();
         commandsFactory = new CommandsFactory();
     }

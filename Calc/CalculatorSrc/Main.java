@@ -9,7 +9,7 @@ public class Main {
         if (args.length == 1)
             inputName = args[0];
 
-        Calc calc = new Calc();
+        Calculator calc = new Calculator();
         calc.calculate(inputName);
     }
 }
