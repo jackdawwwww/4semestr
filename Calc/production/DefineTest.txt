@@ -1,0 +1,6 @@
+DEFINE a 3
+PUSH a
+DEFINE a 1
+DEFINE aa 2
+PUSH aa
+PUSH a

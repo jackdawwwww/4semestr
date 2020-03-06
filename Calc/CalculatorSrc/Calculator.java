@@ -2,6 +2,8 @@ import Commands.Command;
 import Context.CalcContext;
 import Exceptions.MyException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 
@@ -10,6 +12,7 @@ public class Calculator {
 
     CalcContext context;
     CommandsFactory commandsFactory;
+    boolean isException = false;
 
     public Calculator() {
         context = new CalcContext();
@@ -18,7 +21,7 @@ public class Calculator {
     public void calculate(String fileName) throws MyException, ClassNotFoundException {
 
         try {
-            Scanner scanner = fileName.equals("") ? new Scanner(System.in) : new Scanner(fileName);
+            Scanner scanner = fileName.equals("") ? new Scanner(System.in) : new Scanner(new File(fileName));
             log.getIfo("Start calculating");
 
             while (scanner.hasNextLine()) {
@@ -33,19 +36,21 @@ public class Calculator {
                 if (words.size() > 1)
                     args = words.subList(1, words.size());
 
-                log.getIfo("Start '" + commandName + " " + (args.isEmpty() ? "" : args) + "'");
+                if (args == null) args = Collections.singletonList("");
+                log.getIfo("Start '" + commandName + " " + args);
 
                 Command com = commandsFactory.getCommand(commandName);
                 com.execute(context, args);
 
-                log.getIfo("Successful '" + commandName + " " + (args.isEmpty() ? "" : args) + "'");
+                log.getIfo("Successful'");
             }
             if (!context.isEmpty()) {
                 log.getIfo("Result is: ");
                 context.print();
             }
             log.getIfo("Successful calculating");
-        } catch (MyException e){
+        } catch (MyException | FileNotFoundException e){
+            isException = true;
             log.error(e);
         }
     }

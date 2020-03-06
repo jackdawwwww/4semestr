@@ -46,7 +46,7 @@ public class CalcContext {
         } catch (NumberFormatException e) {
             value = definitions.get(name);
 
-            if (value == null) throw new InvalidArgsExceptions("DEFINE null");
+            if (value == null) throw new InvalidArgsExceptions("null");
             stack.push(value);
         }
     }

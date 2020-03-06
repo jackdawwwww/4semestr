@@ -1,0 +1,6 @@
+PUSH 2
+PUSH 0
+/
+PUSH 0
+PUSH 2
+/
