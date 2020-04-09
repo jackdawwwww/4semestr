@@ -37,7 +37,7 @@ public class Calculator {
                     args = words.subList(1, words.size());
 
                 if (args == null) args = Collections.singletonList("");
-                log.getIfo("Start '" + commandName + " " + args);
+                log.getIfo("Start '" + commandName );
 
                 Command com = commandsFactory.getCommand(commandName);
                 com.execute(context, args);
