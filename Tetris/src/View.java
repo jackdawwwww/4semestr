@@ -115,10 +115,11 @@ public class View extends JPanel implements ActionListener {
         if (model.getCurrentShapeType() == ShapeTypes.POINT) return;
 
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT -> controller.goLeft();
-            case KeyEvent.VK_RIGHT -> controller.goRight();
-            case KeyEvent.VK_DOWN -> controller.rotateLeft();
-            case KeyEvent.VK_UP -> controller.rotateRight();
+            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> controller.goLeft();
+            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> controller.goRight();
+            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> controller.rotateLeft();
+            case KeyEvent.VK_UP, KeyEvent.VK_W -> controller.rotateRight();
+
             case KeyEvent.VK_SPACE -> controller.dropDown();
         }
         repaint();
