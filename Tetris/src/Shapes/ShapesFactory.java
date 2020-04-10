@@ -1,5 +1,4 @@
-import Shapes.*;
-import Shapes.ShapeInterface;
+package Shapes;
 
 public class ShapesFactory {
     public ShapeInterface getShape(ShapeTypes type) {

@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Game {
-//таблица рекордов//
     
     private static Dimension menuSize = new Dimension(500, 110);
     private static Dimension buttonSize = new Dimension(100, 60);
@@ -36,7 +35,6 @@ public class Game {
 
         final JButton highScoresButton = addMenuButton("High Scores", 120, gameWindow);
         highScoresButton.addActionListener(e -> getHighscores());
-
 
         final JButton aboutButton = addMenuButton("About", 230, gameWindow);
         aboutButton.addActionListener(e -> getInfo());
@@ -73,41 +71,41 @@ public class Game {
 
     void startGame() {
        JDialog dialog = new JDialog((JFrame) null, "Tetris");
-        dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+       dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        final View view = new View();
-        dialog.getContentPane().add(view);
-        view.addKeyListener(new KeyAdapter() {
+       final View view = new View();
+       dialog.getContentPane().add(view);
+       view.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 view.keyPressed(e);
             }
         });
-        dialog.setVisible(true);
-        dialog.pack();
-        dialog.setResizable(true);
-        dialog.setLocation(0, 120);
-        dialog.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
 
-            }
+       dialog.setVisible(true);
+       dialog.pack();
+       dialog.setResizable(true);
+       dialog.setLocation(0, 120);
+       dialog.addWindowListener(new WindowListener() {
 
-            @Override
-            public void windowClosing(WindowEvent e) {
-                Object[] options = {"YES", "NO"};
-                int n = JOptionPane.showOptionDialog(e.getWindow(), "Save Score?", "Tetris",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+           @Override
+           public void windowOpened(WindowEvent e) { }
 
-                if(n == 0) {
-                    String name = JOptionPane.showInputDialog(null,
-                            "Name", "Score", 1);
-                    if (name != null) {
-                        name = name + " ";
-                        highscore.setScore(view.getModel().getScore(), name);
-                    }
+           @Override
+           public void windowClosing(WindowEvent e) {
+               Object[] options = {"YES", "NO"};
+               int n = JOptionPane.showOptionDialog(e.getWindow(), "Save Score?", "Tetris",
+                       JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+               if(n == 0) {
+                   String name = JOptionPane.showInputDialog(null,
+                           "Name", "Score", 1);
+                   if (name != null) {
+                       name = name + " ";
+                       highscore.setScore(view.getModel().getScore(), name);
+                   }
                 }
-                e.getWindow().dispose();
+               e.getWindow().dispose();
             }
 
             @Override

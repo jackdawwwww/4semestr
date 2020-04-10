@@ -1,5 +1,6 @@
 import Shapes.ShapeInterface;
 import Shapes.ShapeTypes;
+import Shapes.ShapesFactory;
 
 import java.awt.*;
 import java.util.Random;

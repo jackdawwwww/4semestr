@@ -57,7 +57,6 @@ public class View extends JPanel implements ActionListener {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-
         draw(g);
     }
 
@@ -65,15 +64,15 @@ public class View extends JPanel implements ActionListener {
         var size = getSize();
         int boardTop = (int) size.getHeight() - HEIGHT * squareHeight();
 
-        for (int i = 0; i < HEIGHT; i++) {
+        for (int i = 0; i < HEIGHT; i++) { //рисуем уже установившиеся фигурки
             for (int j = 0; j < WIDTH; j++) {
                 ShapeTypes shape = model.shapeTypeAt(j, HEIGHT - i - 1);
                 if (shape != ShapeTypes.POINT)
                     drawSquare(g, j * squareWidth(), boardTop + i * squareHeight(), shape);
             }
         }
-        if (model.getCurrentShapeType() != ShapeTypes.POINT) {
 
+        if (model.getCurrentShapeType() != ShapeTypes.POINT) {  //рисуем еще не упавшую до конца фигурку
             Point point;
             for (int i = 0; i < 4; i++) {
                 point = model.getPoint(i);
@@ -86,7 +85,7 @@ public class View extends JPanel implements ActionListener {
     }
 
     private void drawSquare(Graphics g, int x, int y, ShapeTypes shape) {
-        Color[] colors = {new Color(204, 102, 102), new Color(102, 204, 102),
+        Color[] colors = { new Color(204, 102, 102), new Color(102, 204, 102),
                 new Color(102, 102, 204), new Color(204, 204, 102),
                 new Color(204, 102, 204), new Color(102, 204, 204),
                 new Color(218, 170, 0),  new Color(0, 0, 0)
