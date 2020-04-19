@@ -1,15 +1,25 @@
+import HighScores.HighScoreManager;
 import HighScores.Highscore;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Game {
-    
     private static Dimension menuSize = new Dimension(500, 110);
     private static Dimension buttonSize = new Dimension(100, 60);
-    private static Highscore highscore = new Highscore();
+    private static Highscore highscore;
+
+    static {
+        try {
+            HighScoreManager highScoreManager = new HighScoreManager();
+            highscore = highScoreManager.getHighscore();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
        new Game().makeGraphicInterface();
@@ -42,6 +52,8 @@ public class Game {
         final JButton exitButton = addMenuButton("Exit", 340, gameWindow);
         exitButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(exitButton, "Exit", "OK", JOptionPane.WARNING_MESSAGE );
+
+            HighScoreManager.saveAll();
             System.exit(0);
         });
 
@@ -99,7 +111,7 @@ public class Game {
 
                if(n == 0) {
                    String name = JOptionPane.showInputDialog(null,
-                           "Name", "Score", 1);
+                           "Name", "Score", JOptionPane.INFORMATION_MESSAGE);
                    if (name != null) {
                        name = name + " ";
                        highscore.setScore(view.getModel().getScore(), name);

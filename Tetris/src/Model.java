@@ -2,6 +2,7 @@ import Shapes.ShapeInterface;
 import Shapes.ShapeTypes;
 import Shapes.ShapesFactory;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
@@ -20,22 +21,27 @@ public class Model {
     public int currentY = 0;
 
     private int score;
+    private Timer timer;
+    private Controller controller;
 
-
-    public Model() {
+    public Model(Controller controller) {
         currentShape = factory.getShape(ShapeTypes.POINT);
+        this.controller = controller;
     }
 
     public void init() {
         board = new ShapeTypes[HEIGHT * WIDTH];
         clear();
+
+        timer = new javax.swing.Timer(400, controller.getView());
+        timer.start();
     }
 
     private void setCurrentShape(ShapeTypes currentShape) {
         this.currentShape = factory.getShape(currentShape);
     }
 
-    void newShape() {
+    private void newShape() {
         Random rand = new Random();
         int num = rand.nextInt(7);
         ShapeTypes[] types = ShapeTypes.values();
@@ -51,12 +57,56 @@ public class Model {
         }
     }
 
-    void clear() {
+    void start() {
+        isFallen = false;
+        score = 0;
+        clear();
+        newShape();
+
+        timer.start();
+    }
+
+    private void clear() {
         for(int i = 0; i < HEIGHT * WIDTH; i++)
             board[i] = ShapeTypes.POINT;
     }
 
-    void droppedDown() {
+    private void oneLineDown() {
+        if(!possibleToMove(currentX, currentY - 1)) droppedDown();
+    }
+
+    void dropDown() {
+        int newY = currentY;
+
+        while(newY > 0) {
+            if(!possibleToMove(currentX, newY - 1)) {
+                isFallen = true;
+                break;
+            }
+            newY--;
+            controller.repaint();
+        }
+
+        droppedDown();
+        controller.setStatusBar(String.valueOf(score));
+    }
+
+    void doGameCycle() {
+        if(isStop) {
+            controller.setStatusBar("Game over");
+            return;
+        }
+        if(isFallen) {
+            isFallen = false;
+            newShape();
+        } else {
+            oneLineDown();
+        }
+
+        controller.repaint();
+    }
+
+    private void droppedDown() {
         Point point;
         for(int i = 0; i < 4; i++) {
             point = currentShape.getPoint(i);
@@ -104,7 +154,7 @@ public class Model {
     }
 
 
-    boolean possibleToMove(int x, int y) {
+    private boolean possibleToMove(int x, int y) {
         Point point;
         for (int i = 0; i < 4; i++) {
             point = currentShape.getPoint(i);
@@ -185,17 +235,14 @@ public class Model {
         return min;
     }
 
-    boolean isFallen() { return isFallen; }
-
-    void setIsFallen(boolean f) { isFallen = f; }
-
-    boolean isStop() { return isStop; }
-
-    int getScore() { return score; }
 
     Point getPoint(int num) {
         return currentShape.getPoint(num);
     }
 
     ShapeTypes getCurrentShapeType() { return currentShape.getType(); }
+
+    int getScore() {
+        return score;
+    }
 }

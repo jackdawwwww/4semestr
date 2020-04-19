@@ -1,6 +1,8 @@
 package HighScores;
 
-public class Score {
+import java.io.Serializable;
+
+public class Score implements Serializable {
     private int points;
     private String name;
     private int gameNum;

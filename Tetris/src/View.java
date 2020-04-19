@@ -17,8 +17,8 @@ public class View extends JPanel implements ActionListener {
     private static Dimension dimension = new Dimension(400, 600);
 
     View() {
-        model = new Model();
         controller = new Controller(this);
+        model = new Model(controller);
 
         statusBar = new JLabel("0");
         add(statusBar, BorderLayout.SOUTH);
@@ -33,10 +33,6 @@ public class View extends JPanel implements ActionListener {
 
     public void setStatusBar(String text) {
         statusBar.setText(text);
-        repaint();
-    }
-
-    public void viewRepaint() {
         repaint();
     }
 

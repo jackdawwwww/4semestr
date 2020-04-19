@@ -1,63 +1,40 @@
-import javax.swing.*;
+
 
 public class Controller {
     private Model model;
-    private int score;
-
-    private Timer timer;
     View view;
 
     Controller(View view) {
         this.view = view;
-        model = view.getModel();
     }
 
     public void init() {
-        timer = new javax.swing.Timer(400, view);
-        timer.start();
+        model = view.getModel();
         model.init();
     }
 
-    void doGameCycle() {
-        if(model.isStop()) {
-            view.setStatusBar("Game over");
-            return;
-        }
-        if(model.isFallen()) {
-            model.setIsFallen(false);
-            model.newShape();
-        } else {
-            oneLineDown();
-        }
-        view.repaint();
-    }
-
     void start() {
-        model.setIsFallen(false);
-        score = 0;
-        model.clear();
-        model.newShape();
-        timer.start();
+        model.start();
     }
 
-    private void oneLineDown() {
-        if(!model.possibleToMove(model.currentX, model.currentY - 1)) model.droppedDown();
+    View getView() {
+        return view;
+    }
+
+    void setStatusBar(String str) {
+        view.setStatusBar(str);
     }
 
     void dropDown() {
-        int newY = model.currentY;
+        model.dropDown();
+    }
 
-        while(newY > 0) {
-            if(!model.possibleToMove(model.currentX, newY - 1)) {
-                model.setIsFallen(true);
-                break;
-            }
-            newY--;
-            view.viewRepaint();
-        }
-        model.droppedDown();
-        score = model.getScore();
-        view.setStatusBar(String.valueOf(score));
+    void repaint() {
+        view.repaint();
+    }
+
+    void doGameCycle() {
+        model.doGameCycle();
     }
 
     void goRight() { model.goRight();}

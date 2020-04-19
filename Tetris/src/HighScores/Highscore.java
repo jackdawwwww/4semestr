@@ -1,13 +1,13 @@
 package HighScores;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Highscore {
+public class Highscore implements Serializable {
 
     private final ArrayList<Score> scoreList;
 
     public Highscore() {
-        this.scoreList = new ArrayList<>();
+       scoreList = new ArrayList<Score>();
     }
 
     public void setScore(int points, String name) {
