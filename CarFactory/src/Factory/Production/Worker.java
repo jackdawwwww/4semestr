@@ -12,13 +12,13 @@ public class Worker extends Thread {
     private Store<Accessory> accStore;
     private CarStore carStore;
 
-    private int accNum;
+ //   private int accNum;
 
     Worker(Store<Body> bodyStore, Store<Engine> engStore, Store<Accessory> accStore, CarStore carStore, int accNum) {
         this.bodyStore = bodyStore;
         this.engStore = engStore;
         this.accStore = accStore;
-        this.accNum = accNum;
+  //      this.accNum = accNum;
         this.carStore = carStore;
     }
 

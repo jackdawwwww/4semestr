@@ -8,7 +8,7 @@ public class Supplier extends Thread {
     private Store store;
     private int timeForProduct;
     private ProductType type;
-    private int num;
+//    private int num;
 
 
     public Supplier(Store store, int time, ProductType type, int num) {
@@ -16,12 +16,12 @@ public class Supplier extends Thread {
         this.store = store;
         this.timeForProduct = time;
         this.type = type;
-        this.num = num;
+  //      this.num = num;
     }
 
     public void run() {
             try {
-                for (int i = 0; i < num; i++)
+         //       for (int i = 0; i < num; i++)
                     store.push(factory.getProduct(type));
 
                 System.out.print("Supply a " + type + "\n");
