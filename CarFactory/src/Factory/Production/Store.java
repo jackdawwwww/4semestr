@@ -1,9 +1,8 @@
 package Factory.Production;
 
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+
 
 public class Store<T> {
     private final Queue<T> queue;
@@ -35,7 +34,6 @@ public class Store<T> {
     }
 
     public synchronized void push(T product) {
-
         while(getCurrNum() == getMaxSize())
             try {
                 this.wait();

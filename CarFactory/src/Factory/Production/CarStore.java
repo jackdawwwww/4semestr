@@ -5,10 +5,8 @@ import java.util.concurrent.BlockingQueue;
 
 public class CarStore {
     private BlockingQueue<Car> cars;
-    private int currNum;
-    private int allNum;
-    private int maxSize;
-    private int waitingNum;
+    private int currNum, allNum;
+    private int maxSize, waitingNum, flag = 0;
 
     public CarStore(int size) {
         maxSize = size;
@@ -35,12 +33,14 @@ public class CarStore {
         waitingNum--;
         while(getCurrNum() == 0)
             try {
+                flag = 1;
                 this.wait();
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return null;
             }
 
+        flag = 0;
         Car car = cars.take();
         System.out.print("get a car for dealer\n");
         this.notifyAll();
@@ -49,8 +49,7 @@ public class CarStore {
 
     public synchronized int getCurrNum() { return cars.size(); }
     public synchronized int getAllNum() { return allNum; }
-    public synchronized int getWaitingNum() { return waitingNum; }
+    public synchronized int getWaitingNum() { return waitingNum + flag; }
     public synchronized void addWaitingNum() { waitingNum++; }
-    public synchronized void subWaitingNum() { waitingNum--; }
 
 }

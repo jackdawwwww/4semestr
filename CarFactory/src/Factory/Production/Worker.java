@@ -43,6 +43,7 @@ public class Worker extends Thread {
                 carStore.addCar(currCar);
 
                 System.out.print("Made new car\n");
+                System.out.print("Made at all: " + carStore.getAllNum() + "cars\n" + carStore.getWaitingNum() + " is waiting\n" );
             } finally {
 
             }

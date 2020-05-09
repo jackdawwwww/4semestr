@@ -21,17 +21,21 @@ public class Car {
         this.acc = acc;
     }
 
-    public UUID getId() { return id; }
-    public UUID getEngId() { return engine.getId(); }
-    public UUID getBodyId() { return body.getId(); }
-    public ArrayList<UUID> getAccId() {
+    @Override
+    public String toString() {
+        String ac = " ";
         ArrayList<UUID> uuIds = new ArrayList<>();
 
         for (int i = 0; i < acc.size(); i++) {
-            uuIds.add(acc.get(i).getId());
+            UUID ui = acc.get(i).getId();
+            ac +=  " " + ui;
         }
 
-        return uuIds;
+
+        String s = " Auto: " + id + "(Body: " + body.getId() +
+                ", Engine: " + engine.getId() + ", Accessory:" + ac + ")\n";
+
+        return s;
     }
 
 }

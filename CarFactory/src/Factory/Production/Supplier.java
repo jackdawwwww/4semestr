@@ -20,9 +20,8 @@ public class Supplier extends Thread {
     }
 
     public void run() {
-
         while(!Thread.currentThread().isInterrupted()) {
-            //System.out.println(store.getMaxSize() + " " + store.getCurrNum());
+            System.out.println(store.getAllNum() + " was made at all\n" + store.getCurrNum() + " is at Store now\n" );
             try {
                 boolean flag = false;
                 for(int i = 0; i < num; i++) {
@@ -32,7 +31,9 @@ public class Supplier extends Thread {
                     }
                 }
                 if(flag)
-                    Thread.sleep(1000 * timeForProduct);
+                    synchronized (this) {
+                        Thread.sleep(1000 * timeForProduct);
+                    }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -7,6 +7,7 @@ import ThreadPool.CustomThreadPool;
 
 import java.util.Properties;
 
+
 public class Model {
     private static Properties properties;
     private static int bSize, eSize, aSize, cSize, wNum, dNum, accNum;
@@ -49,7 +50,7 @@ public class Model {
         workers = carStoreController.getWorkers();
 
         for (int i = 0; i < dNum; i++)
-            dealers[i] = new Dealer(carStore, timeForDeal);
+            dealers[i] = new Dealer(carStore, timeForDeal, useLog, i);
     }
 
     public static void main(String[] args) throws Exception {
@@ -72,8 +73,7 @@ public class Model {
         customThreadPool.submit(carStoreController);
 
 
-
-        customThreadPool.shutdownNow();
+       // customThreadPool.shutdownNow();
     }
 
 }
