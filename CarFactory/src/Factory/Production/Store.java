@@ -1,11 +1,12 @@
 package Factory.Production;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-
 public class Store<T> {
-    private BlockingQueue<T> queue;
+    private final Queue<T> queue;
     int allNum;
     int currNum;
     int maxSize;
@@ -17,23 +18,40 @@ public class Store<T> {
         queue = new ArrayBlockingQueue<>(size);
     }
 
-    synchronized T take() throws InterruptedException {
-        T t = queue.take();
+    public synchronized T take() throws InterruptedException {
+        while(getCurrNum() == 0)
+            try {
+                this.wait();
+            } catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
+        T t = queue.poll();
         currNum--;
+
+        this.notifyAll();
 
         return t;
     }
 
-    synchronized void push(T product) {
-        queue.add(product);
+    public synchronized void push(T product) {
 
-        if(currNum < maxSize) {
-            currNum++;
-            allNum++;
-        }
+        while(getCurrNum() == getMaxSize())
+            try {
+                this.wait();
+            } catch(Throwable ignored) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+
+        queue.offer(product);
+        currNum++;
+        allNum++;
+        this.notify();
     }
 
-    synchronized int getAllNum() { return allNum; }
-    synchronized int getCurrNum() { return currNum; }
+    public synchronized int getMaxSize() { return maxSize; }
+    public synchronized int getAllNum() { return allNum; }
+    public synchronized int getCurrNum() { return queue.size(); }
 
 }

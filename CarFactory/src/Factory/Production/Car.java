@@ -4,17 +4,17 @@ import Factory.Products.Accessory;
 import Factory.Products.Body;
 import Factory.Products.Engine;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class Car {
     private Engine engine;
     private Body body;
-//    private ArrayList<Accessory> acc;
-    private Accessory acc;
+    private ArrayList<Accessory> acc;
     private UUID id;
 
-    public Car(Engine engine, Body body, Accessory acc) {
+    public Car(Engine engine, Body body, ArrayList<Accessory> acc) {
         this.engine = engine;
         this.body = body;
         this.id = UUID.randomUUID();
@@ -24,14 +24,14 @@ public class Car {
     public UUID getId() { return id; }
     public UUID getEngId() { return engine.getId(); }
     public UUID getBodyId() { return body.getId(); }
-//    public ArrayList<UUID> getAccId() {
-//        ArrayList<UUID> uuIds = new ArrayList<>();
-//
-//        for (int i = 0; i < acc.size(); i++) {
-//            uuIds.add(acc.get(i).getId());
-//        }
-//
-//        return uuIds;
-//    }
+    public ArrayList<UUID> getAccId() {
+        ArrayList<UUID> uuIds = new ArrayList<>();
+
+        for (int i = 0; i < acc.size(); i++) {
+            uuIds.add(acc.get(i).getId());
+        }
+
+        return uuIds;
+    }
 
 }

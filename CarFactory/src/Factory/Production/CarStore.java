@@ -16,27 +16,41 @@ public class CarStore {
         waitingNum = 0;
     }
 
-    synchronized void addCar(Car car) {
-        if(currNum < maxSize) {
-            currNum++;
-            allNum++;
-        }
+    public synchronized void addCar(Car car) {
+        while(getCurrNum() == maxSize)
+            try {
+                this.wait();
+            } catch(Throwable ignored) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        currNum++;
+        allNum++;
 
-        cars.add(car);
+        cars.offer(car);
+        this.notify();
     }
 
-    synchronized Car getCar() throws InterruptedException {
-        if(currNum > 0) currNum--;
+    public synchronized Car getCar() throws InterruptedException {
+        waitingNum--;
+        while(getCurrNum() == 0)
+            try {
+                this.wait();
+            } catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
 
         Car car = cars.take();
         System.out.print("get a car for dealer\n");
-        waitingNum--;
+        this.notifyAll();
         return car;
     }
 
-    synchronized int getCurrNum() { return currNum; }
-    synchronized int getAllNum() { return allNum; }
-    synchronized int getWaitingNum() { return waitingNum; }
-    synchronized void addWaitingNum() { waitingNum++; }
+    public synchronized int getCurrNum() { return cars.size(); }
+    public synchronized int getAllNum() { return allNum; }
+    public synchronized int getWaitingNum() { return waitingNum; }
+    public synchronized void addWaitingNum() { waitingNum++; }
+    public synchronized void subWaitingNum() { waitingNum--; }
 
 }

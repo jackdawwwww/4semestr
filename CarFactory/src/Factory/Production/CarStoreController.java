@@ -19,7 +19,7 @@ public class CarStoreController extends Thread {
         this.accStore = aS;
         this.store = store;
         this.num = num;
-        currWorker = 0;
+        currWorker = -1;
 
         workers = new Worker[num];
         for (int i = 0; i < num; i++) {
@@ -32,13 +32,20 @@ public class CarStoreController extends Thread {
     }
 
     public void run() {
-        if(store.getWaitingNum() != 0) {
-            System.out.print("asked for a car\n");
-            workers[currWorker].notify();
-            currWorker++;
+        while(!Thread.currentThread().isInterrupted()) {
+            if(store.getWaitingNum() > 0) {
+                currWorker++;
+                if(currWorker == num) currWorker = 0;
 
-            if(currWorker == num) currWorker = 0;
+                System.out.print("asking for a car\n");
+                try {
+                    workers[currWorker].makeCar();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
     }
 
 }

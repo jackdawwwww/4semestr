@@ -1,62 +1,126 @@
 package ThreadPool;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class CustomThreadPool {
+    private BlockingQueue<Runnable> tasks;
+    private PoolWorker[] workers;
 
-    private final int poolSize;
-    private final WorkerThread[] workers;
-    private final LinkedBlockingQueue<Runnable> queue;
+    private AtomicBoolean isRunning = new AtomicBoolean(true);
+    private AtomicBoolean isShutdown = new AtomicBoolean(false);
+    private AtomicInteger activeWorkersCount = new AtomicInteger();
 
-    public CustomThreadPool(int poolSize) {
-        this.poolSize = poolSize;
-        queue = new LinkedBlockingQueue<Runnable>();
-        workers = new WorkerThread[poolSize];
+    private final Object awaitLock = new Object();
 
-        for (int i = 0; i < poolSize; i++) {
-            workers[i] = new WorkerThread();
-            workers[i].start();
+    public CustomThreadPool(int numThreads) throws Exception {
+        if (numThreads <= 0) {
+            throw new Exception("Number of threads less than or equal to zero was passed");
+        }
+
+        tasks = new LinkedBlockingQueue<>();
+        workers = new PoolWorker[numThreads];
+        activeWorkersCount.set(numThreads);
+
+        for (int threadIndex = 0; threadIndex < numThreads; threadIndex++) {
+            workers[threadIndex] = new PoolWorker();
+            workers[threadIndex].start();
         }
     }
 
-    public void execute(Runnable task) {
-        synchronized (queue) {
-            queue.add(task);
-            queue.notify();
+    public void submit(Runnable task) throws Exception {
+        if (isShutdown.get()) {
+            throw new Exception("Thread pool was terminated");
+        }
+
+        if (task == null) {
+            throw new Exception("Task is null");
+        }
+
+        boolean isSubmitted = tasks.offer(task);
+        if (!isSubmitted) {
+            throw new Exception("Not enough space in the task queue");
         }
     }
 
-    private class WorkerThread extends Thread {
-        public void run() {
-            Runnable task = null;
+    private void shutdown() {
+        isShutdown.set(true);
+    }
 
-            while (true) {
-                synchronized (queue) {
-                    while (queue.isEmpty()) {
-                        try {
-                            queue.wait();
-                        } catch (InterruptedException e) {
-                            System.out.println("An error occurred while queue is waiting: " + e.getMessage());
-                        }
-                    }
-                    task = queue.poll();
-                }
+    public void /*List<Runnable>*/ shutdownNow() {
+        shutdown();
 
-                try {
-                    task.run();
-                } catch (RuntimeException e) {
-                    System.out.println("Thread pool is interrupted due to an issue: " + e.getMessage());
-                }
+        List<Runnable> taskList = new ArrayList<>(tasks.size());
+        tasks.drainTo(taskList);
+
+        for (PoolWorker worker: workers) {
+            worker.interrupt();
+        }
+
+        //return taskList;
+    }
+
+    public boolean isShutdown() {
+        return isShutdown.get();
+    }
+
+    public boolean isTerminating() {
+        return isShutdown.get() && isRunning.get();
+    }
+
+    public boolean isTerminated() {
+        return !isRunning.get();
+    }
+
+    public void awaitTermination() throws InterruptedException {
+        synchronized (awaitLock) {
+            while (isRunning.get()) {
+                awaitLock.wait();
             }
         }
     }
 
-    public void shutdown() {
-        System.out.println("Shutting down thread pool");
-        for (int i = 0; i < poolSize; i++) {
-            workers[i].interrupt();
-            workers[i] = null;
+    public void awaitTermination(long timeout) throws InterruptedException {
+        synchronized (awaitLock) {
+            if (isRunning.get()) {
+                awaitLock.wait(timeout);
+            }
+        }
+    }
+
+    private class PoolWorker extends Thread {
+        @Override
+        public void run() {
+            while (!isInterrupted()) {
+                try {
+                    Runnable task = isShutdown() ? tasks.poll() : tasks.take();
+                    if (task == null) {
+                        break;
+                    }
+                    task.run();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (RuntimeException e) {
+                    System.err.println("Task has failed:");
+                    e.printStackTrace();
+                }
+            }
+
+            finishWork();
+        }
+
+        private void finishWork() {
+            if (activeWorkersCount.decrementAndGet() == 0) {
+                synchronized (awaitLock) {
+                    isRunning.set(false);
+                    awaitLock.notifyAll();
+                }
+            }
         }
     }
 }
-

@@ -11,15 +11,17 @@ public class Dealer extends Thread {
     }
 
     public void run() {
-        try {
-            sleep(timeForCar * 1000);
-            carStore.addWaitingNum();
+        while(!Thread.currentThread().isInterrupted()) {
+            try {
+                sleep(timeForCar * 1000);
+                carStore.addWaitingNum();
+                System.out.print("Dealer add waiting num\n");
+                car = carStore.getCar();
 
-            car = carStore.getCar();
-            System.out.print("Sale a car\n");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+                System.out.print("Sale a car\n");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 }
