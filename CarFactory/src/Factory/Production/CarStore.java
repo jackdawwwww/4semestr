@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class CarStore {
     private BlockingQueue<Car> cars;
-    private int currNum, allNum;
+    private int allNum;
     private int maxSize, waitingNum, flag = 0;
 
     public CarStore(int size) {
@@ -22,7 +22,6 @@ public class CarStore {
                 Thread.currentThread().interrupt();
                 return;
             }
-        currNum++;
         allNum++;
 
         cars.offer(car);

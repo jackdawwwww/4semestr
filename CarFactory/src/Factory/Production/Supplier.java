@@ -19,21 +19,27 @@ public class Supplier extends Thread {
         this.num = num;
     }
 
+    public void setTime(int time) {
+ //       System.out.print("Set time " + time + "\n");
+        timeForProduct = time;
+    }
+
     public void run() {
         while(!Thread.currentThread().isInterrupted()) {
-            System.out.println(store.getAllNum() + " was made at all\n" + store.getCurrNum() + " is at Store now\n" );
+          //  System.out.println(store.getAllNum() + " was made at all\n" + store.getCurrNum() + " is at Store now\n" );
             try {
                 boolean flag = false;
                 for(int i = 0; i < num; i++) {
                     if (flag = (store.getMaxSize() != store.getCurrNum())) {
-                        System.out.print("Supply a " + type + "\n");
+                 //       System.out.print("Supply a " + type + "\n");
                         store.push(factory.getProduct(type));
                     }
                 }
+
                 if(flag)
                     synchronized (this) {
-                        Thread.sleep(1000 * timeForProduct);
-                    }
+                        sleep(1000 * timeForProduct);
+                   }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

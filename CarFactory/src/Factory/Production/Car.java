@@ -4,7 +4,6 @@ import Factory.Products.Accessory;
 import Factory.Products.Body;
 import Factory.Products.Engine;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -23,19 +22,15 @@ public class Car {
 
     @Override
     public String toString() {
-        String ac = " ";
-        ArrayList<UUID> uuIds = new ArrayList<>();
+        StringBuilder ac = new StringBuilder(" ");
 
-        for (int i = 0; i < acc.size(); i++) {
-            UUID ui = acc.get(i).getId();
-            ac +=  " " + ui;
+        for (Accessory accessory : acc) {
+            UUID ui = accessory.getId();
+            ac.append(" ").append(ui);
         }
 
-
-        String s = " Auto: " + id + "(Body: " + body.getId() +
+        return " Auto: " + id + "(Body: " + body.getId() +
                 ", Engine: " + engine.getId() + ", Accessory:" + ac + ")\n";
-
-        return s;
     }
 
 }

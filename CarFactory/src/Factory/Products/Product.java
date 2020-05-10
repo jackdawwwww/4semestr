@@ -21,10 +21,6 @@ public class Product implements ProductInterface {
         return id;
     }
 
-    public ProductType getType() {
-        return type;
-    }
-
     public void setType(ProductType type) {
         this.type = type;
     }

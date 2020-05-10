@@ -1,21 +1,24 @@
 package Factory.Production;
 
 public class Dealer extends Thread {
-    CarStore carStore;
-    Car car;
-    int timeForCar, number;
-    boolean useLog;
-    private static MyLogger logger;
+    private long startTime;
+    private CarStore carStore;
+    private int timeForCar, number;
+    private boolean useLog;
+    private final MyLogger logger;
 
-    public Dealer(CarStore carStore, int timeForCar, boolean useLog, int number) {
+    public Dealer(CarStore carStore, int timeForCar, boolean useLog, int number, MyLogger logger) {
         this.carStore = carStore;
         this.timeForCar = timeForCar;
         this.useLog = useLog;
         this.number = number;
+        this.logger = logger;
 
-        if(useLog) {
-            logger = new MyLogger();
-        }
+        startTime = System.currentTimeMillis();
+    }
+
+    public void setTime(int time) {
+        timeForCar = time;
     }
 
     public void run() {
@@ -25,12 +28,19 @@ public class Dealer extends Thread {
                     sleep(timeForCar * 1000);
                 }
                 carStore.addWaitingNum();
-                System.out.print("Dealer add waiting num\n");
-                car = carStore.getCar();
+             //   System.out.print("Dealer add waiting num\n");
+                Car car = carStore.getCar();
+                long currTime = System.currentTimeMillis();
 
-                String info = "<Time>: " + ", Dealer: " + number + "," + car.toString();
-                logger.getIfo(info);
-                System.out.print("Sale a car\n");
+                if(useLog) {
+                    String info = "Time: " + ((currTime - startTime) / 1000) + ", Dealer: " + number + "," + car.toString();
+
+                    synchronized (logger) {
+                        logger.getIfo(info);
+                    }
+                }
+
+          //      System.out.print("Sale a car\n");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

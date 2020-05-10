@@ -5,75 +5,101 @@ import Factory.Products.Engine;
 import Factory.Products.ProductType;
 import ThreadPool.CustomThreadPool;
 
-import java.util.Properties;
-
+import java.io.IOException;
+import javax.swing.*;
 
 public class Model {
-    private static Properties properties;
-    private static int bSize, eSize, aSize, cSize, wNum, dNum, accNum;
-    private static boolean useLog;
+    private static MyProperties properties;
+    private CustomThreadPool customThreadPool;
+    private Controller controller;
+    private Timer timer;
 
-    private static Store<Body> bodyStore;
-    private static Store<Engine> engineStore;
-    private static Store<Accessory> accessoryStore;
-    private static CarStore carStore;
-    private static CarStoreController carStoreController;
-    private static Supplier bodySupplier, engSupplier, accSupplier;
-    private static Dealer[] dealers;
-    private static Worker[] workers;
-    private static int timeForEngine = 1, timeForBody = 1, timeForAcc = 1, timeForDeal = 1;
+    private Store<Body> bodyStore;
+    private Store<Engine> engineStore;
+    private Store<Accessory> accessoryStore;
+    private CarStore carStore;
+    private CarStoreController carStoreController;
+    private Supplier bodySupplier, engSupplier, accSupplier;
+    private Dealer[] dealers;
+    private Worker[] workers;
 
-    static void parseProperties() {
-        bSize = Integer.parseInt(properties.getProperty("bodyStSize"));
-        eSize = Integer.parseInt(properties.getProperty("engStSize"));
-        aSize = Integer.parseInt(properties.getProperty("accStSize"));
-        cSize = Integer.parseInt(properties.getProperty("carStSize"));
-        wNum = Integer.parseInt(properties.getProperty("workersN"));
-        dNum = Integer.parseInt(properties.getProperty("dealersN"));
-        accNum = Integer.parseInt(properties.getProperty("accN"));
-        useLog = Boolean.parseBoolean(properties.getProperty("logSale"));
-    }
-
-    static void init() {
-        bodyStore = new Store<>(bSize);
-        engineStore = new Store<>(eSize);
-        accessoryStore = new Store<>(aSize);
-        carStore = new CarStore(cSize);
-
-        accSupplier = new Supplier(accessoryStore, timeForAcc, ProductType.Accessory, accNum);
-        bodySupplier = new Supplier(bodyStore, timeForBody, ProductType.Body, 1);
-        engSupplier = new Supplier(engineStore, timeForEngine, ProductType.Engine, 1);
-
-        carStoreController = new CarStoreController(bodyStore, engineStore, accessoryStore, carStore, wNum, accNum);
-
-        dealers = new Dealer[dNum];
-        workers = carStoreController.getWorkers();
-
-        for (int i = 0; i < dNum; i++)
-            dealers[i] = new Dealer(carStore, timeForDeal, useLog, i);
-    }
-
-    public static void main(String[] args) throws Exception {
-        properties = new Properties();
-        properties.load(Model.class.getResourceAsStream("Settings.properties"));
-
-        parseProperties();
+    Model(Controller controller) throws Exception {
+        this.controller = controller;
         init();
+    }
 
-        CustomThreadPool customThreadPool = new CustomThreadPool(13);
+    void init() throws IOException {
+       properties = new MyProperties();
+        MyLogger logger = new MyLogger();
+
+       bodyStore = new Store<>(properties.bSize());
+       engineStore = new Store<>(properties.eSize());
+       accessoryStore = new Store<>(properties.aSize());
+       carStore = new CarStore(properties.cSize());
+
+       int time = 2;
+       accSupplier = new Supplier(accessoryStore, time, ProductType.Accessory, properties.accNum());
+       bodySupplier = new Supplier(bodyStore, time, ProductType.Body, 1);
+       engSupplier = new Supplier(engineStore, time, ProductType.Engine, 1);
+
+       carStoreController = new CarStoreController(bodyStore, engineStore, accessoryStore,
+                                                    carStore, properties.wNum(), properties.accNum());
+
+       dealers = new Dealer[properties.dNum()];
+       workers = carStoreController.getWorkers();
+
+        for (int i = 0; i < properties.dNum(); i++)
+           dealers[i] = new Dealer(carStore, time, properties.useLog(), i, logger);
+
+        timer = new javax.swing.Timer(400, controller.getView());
+    }
+
+
+    void start() throws Exception {
+        customThreadPool = new CustomThreadPool(13);
 
         customThreadPool.submit(accSupplier);
         customThreadPool.submit(bodySupplier);
         customThreadPool.submit(engSupplier);
-        for (int i = 0; i < dNum; i++)
+        for (int i = 0; i < properties.dNum(); i++)
             customThreadPool.submit(dealers[i]);
 
-        for (int i = 0; i < wNum; i++)
+        for (int i = 0; i < properties.wNum(); i++)
             customThreadPool.submit(workers[i]);
         customThreadPool.submit(carStoreController);
 
-
-       // customThreadPool.shutdownNow();
+        timer.start();
     }
 
+    void cancel() {
+        System.out.print("exit");
+        customThreadPool.shutdownNow();
+    }
+
+    void work() {
+        controller.setEngValues(engineStore.getAllNum(), engineStore.getCurrNum());
+        controller.setBodyValues(bodyStore.getAllNum(), bodyStore.getCurrNum());
+        controller.setAccValues(accessoryStore.getAllNum(), accessoryStore.getCurrNum());
+        controller.setCarValues(carStore.getAllNum(), carStore.getCurrNum());
+
+        controller.repaint();
+    }
+
+    void setTimeForEngine(int time) {
+        engSupplier.setTime(time);
+    }
+
+    void setTimeForBody(int time) {
+        bodySupplier.setTime(time);
+    }
+
+    void setTimeForAcc(int time) {
+        accSupplier.setTime(time);
+    }
+
+    void setTimeForDeal(int time) {
+        for(Dealer d: dealers) {
+            d.setTime(time);
+        }
+    }
 }

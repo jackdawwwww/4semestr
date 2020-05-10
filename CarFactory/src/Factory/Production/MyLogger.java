@@ -17,10 +17,6 @@ public class MyLogger {
         }
     }
 
-    public void error(Exception e) {
-        LOGGER.log(Level.INFO, e.getMessage());
-    }
-
     public void getIfo(String s) {
         LOGGER.log(Level.INFO, s);
     }

@@ -52,45 +52,21 @@ public class CustomThreadPool {
         isShutdown.set(true);
     }
 
-    public void /*List<Runnable>*/ shutdownNow() {
+    public void shutdownNow() {
         shutdown();
 
         List<Runnable> taskList = new ArrayList<>(tasks.size());
         tasks.drainTo(taskList);
 
         for (PoolWorker worker: workers) {
+            worker.finishWork();
             worker.interrupt();
         }
 
-        //return taskList;
     }
 
     public boolean isShutdown() {
         return isShutdown.get();
-    }
-
-    public boolean isTerminating() {
-        return isShutdown.get() && isRunning.get();
-    }
-
-    public boolean isTerminated() {
-        return !isRunning.get();
-    }
-
-    public void awaitTermination() throws InterruptedException {
-        synchronized (awaitLock) {
-            while (isRunning.get()) {
-                awaitLock.wait();
-            }
-        }
-    }
-
-    public void awaitTermination(long timeout) throws InterruptedException {
-        synchronized (awaitLock) {
-            if (isRunning.get()) {
-                awaitLock.wait(timeout);
-            }
-        }
     }
 
     private class PoolWorker extends Thread {
@@ -102,7 +78,9 @@ public class CustomThreadPool {
                     if (task == null) {
                         break;
                     }
+                    if(!isShutdown())
                     task.run();
+
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 } catch (RuntimeException e) {

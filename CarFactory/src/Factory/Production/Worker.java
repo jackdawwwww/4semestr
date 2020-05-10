@@ -22,7 +22,7 @@ public class Worker extends Thread {
         this.carStore = carStore;
     }
 
-    public synchronized void makeCar() throws InterruptedException {
+    public synchronized void makeCar() {
         ArrayList<Accessory> acc = new ArrayList<>();
         for(int i = 0; i < accNum; i++) acc.add(accStore.take());
 
@@ -32,7 +32,6 @@ public class Worker extends Thread {
 
     public void run() {
         while(!Thread.currentThread().isInterrupted()) {
-            try {
                 synchronized (this) {
                     try {
                         wait();
@@ -42,12 +41,10 @@ public class Worker extends Thread {
                 }
                 carStore.addCar(currCar);
 
-                System.out.print("Made new car\n");
-                System.out.print("Made at all: " + carStore.getAllNum() + "cars\n" + carStore.getWaitingNum() + " is waiting\n" );
-            } finally {
+            //    System.out.print("Made new car\n");
+             //   System.out.print("Made at all: " + carStore.getAllNum() + "cars\n" + carStore.getWaitingNum() + " is waiting\n" );
 
             }
         }
-    }
 
 }
