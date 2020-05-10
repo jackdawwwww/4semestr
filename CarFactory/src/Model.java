@@ -51,7 +51,7 @@ public class Model {
         for (int i = 0; i < properties.dNum(); i++)
            dealers[i] = new Dealer(carStore, time, properties.useLog(), i, logger);
 
-        timer = new javax.swing.Timer(400, controller.getView());
+        timer = new javax.swing.Timer(100, controller.getView());
     }
 
 
@@ -86,6 +86,7 @@ public class Model {
     }
 
     void setTimeForEngine(int time) {
+        
         engSupplier.setTime(time);
     }
 

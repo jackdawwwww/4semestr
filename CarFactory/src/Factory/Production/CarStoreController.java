@@ -38,11 +38,7 @@ public class CarStoreController extends Thread {
                 if(currWorker == num) currWorker = 0;
 
             //    System.out.print("asking for a car\n");
-                try {
-                    workers[currWorker].makeCar();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                workers[currWorker].makeCar();
             }
         }
 
