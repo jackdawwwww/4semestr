@@ -86,19 +86,22 @@ public class Model {
     }
 
     void setTimeForEngine(int time) {
-        
+        System.out.print("edit time for " + time + "\n");
         engSupplier.setTime(time);
     }
 
     void setTimeForBody(int time) {
+        System.out.print("edit time for " + time + "\n");
         bodySupplier.setTime(time);
     }
 
     void setTimeForAcc(int time) {
+        System.out.print("edit time for " + time + "\n");
         accSupplier.setTime(time);
     }
 
     void setTimeForDeal(int time) {
+        System.out.print("edit time for " + time + "\n");
         for(Dealer d: dealers) {
             d.setTime(time);
         }

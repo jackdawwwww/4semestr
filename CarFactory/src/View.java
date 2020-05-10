@@ -55,31 +55,33 @@ public class View extends JPanel implements ActionListener {
 
     private void tuneSliders() {
         engSlider = setSlider();
-        engSlider.addChangeListener(e -> controller.setTimeForEngine(((JSlider)e.getSource()).getValue() / 25));
+        engSlider.addChangeListener(e -> controller.setTimeForEngine(((JSlider)e.getSource()).getValue() / 10));
 
         bodySlider = setSlider();
-        bodySlider.addChangeListener(e -> controller.setTimeForBody(((JSlider)e.getSource()).getValue() / 25));
+        bodySlider.addChangeListener(e -> controller.setTimeForBody(((JSlider)e.getSource()).getValue() / 10));
 
         accSlider = setSlider();
-        accSlider.addChangeListener(e -> controller.setTimeForAcc(((JSlider)e.getSource()).getValue() / 25));
+        accSlider.addChangeListener(e -> controller.setTimeForAcc(((JSlider)e.getSource()).getValue() / 10));
 
         dealSlider = setSlider();
-        dealSlider.addChangeListener(e -> controller.setTimeForDeal(((JSlider)e.getSource()).getValue() / 25));
+        dealSlider.addChangeListener(e -> controller.setTimeForDeal(((JSlider)e.getSource()).getValue() / 10));
     }
 
     private JSlider setSlider() {
         JSlider slider = new JSlider();
-        slider.setMinorTickSpacing(25);
+        slider.setMinorTickSpacing(20);
+        slider.setMajorTickSpacing(10);
 
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
 
         Hashtable<Integer, JLabel> position = new Hashtable<>();
         position.put(0, new JLabel("0"));
-        position.put(25, new JLabel("1"));
-        position.put(50, new JLabel("2"));
-        position.put(75, new JLabel("3"));
-        position.put(100, new JLabel("4"));
+        position.put(20, new JLabel("1"));
+        position.put(40, new JLabel("2"));
+        position.put(60, new JLabel("3"));
+        position.put(80, new JLabel("4"));
+        position.put(100, new JLabel("5"));
 
         slider.setLabelTable(position);
 

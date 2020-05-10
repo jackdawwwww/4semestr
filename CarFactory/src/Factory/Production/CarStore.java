@@ -41,7 +41,7 @@ public class CarStore {
 
         flag = 0;
         Car car = cars.take();
-        System.out.print("get a car for dealer\n");
+   //     System.out.print("get a car for dealer\n");
         this.notifyAll();
         return car;
     }
