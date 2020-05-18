@@ -7,6 +7,7 @@ public class CarStore {
     private BlockingQueue<Car> cars;
     private int allNum;
     private int maxSize, waitingNum, flag = 0;
+    private CarStoreController controller = null;
 
     public CarStore(int size) {
         maxSize = size;
@@ -15,7 +16,7 @@ public class CarStore {
     }
 
     public synchronized void addCar(Car car) {
-        while(getCurrNum() == maxSize)
+        while(cars.size() == maxSize)
             try {
                 this.wait();
             } catch(Throwable ignored) {
@@ -30,16 +31,15 @@ public class CarStore {
 
     public synchronized Car getCar() throws InterruptedException {
         waitingNum--;
-        while(getCurrNum() == 0)
+        controller.setWaitingNum(waitingNum + 1);
+        while(cars.size() == 0)
             try {
-                flag = 1;
                 this.wait();
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return null;
             }
-
-        flag = 0;
+        controller.setWaitingNum(waitingNum);
         Car car = cars.take();
    //     System.out.print("get a car for dealer\n");
         this.notifyAll();
@@ -48,7 +48,10 @@ public class CarStore {
 
     public synchronized int getCurrNum() { return cars.size(); }
     public synchronized int getAllNum() { return allNum; }
-    public synchronized int getWaitingNum() { return waitingNum + flag; }
-    public synchronized void addWaitingNum() { waitingNum++; }
+    public synchronized void addWaitingNum() {
+        waitingNum++;
+        controller.setWaitingNum(waitingNum);
+    }
+    public synchronized void setController(CarStoreController controller) { this.controller = controller; }
 
 }

@@ -87,7 +87,7 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
 
-               // view.cancel();
+                view.cancel();
                 e.getWindow().dispose();
             }
 

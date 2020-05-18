@@ -8,7 +8,7 @@ public class Supplier extends Thread {
     private Store store;
     private int timeForProduct;
     private ProductType type;
-    private int num;
+    private int num, storeMaxSize, storeCurrNum = 0;
 
 
     public Supplier(Store store, int time, ProductType type, int num) {
@@ -17,6 +17,8 @@ public class Supplier extends Thread {
         this.timeForProduct = time;
         this.type = type;
         this.num = num;
+        this.storeMaxSize = store.getMaxSize();
+        store.setSupplier(this);
     }
 
     public void setTime(int time) {
@@ -30,7 +32,7 @@ public class Supplier extends Thread {
             try {
                 boolean flag = false;
                 for(int i = 0; i < num; i++) {
-                    if (flag = (store.getMaxSize() != store.getCurrNum())) {
+                    if (flag = (storeMaxSize != storeCurrNum)) {
                  //       System.out.print("Supply a " + type + "\n");
                         store.push(factory.getProduct(type));
                     }
@@ -38,12 +40,16 @@ public class Supplier extends Thread {
 
                 if(flag)
                     synchronized (this) {
-                        sleep(1000 * timeForProduct);
+                        wait(1000 * timeForProduct);
                    }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public void setStoreCurrNum(int storeCurrNum) { this.storeCurrNum = storeCurrNum; }
+    public void minCurrNum() { storeCurrNum--; }
+    public void addCurrNum() { storeCurrNum++; }
 
 }

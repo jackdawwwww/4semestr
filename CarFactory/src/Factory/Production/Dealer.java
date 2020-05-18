@@ -25,7 +25,7 @@ public class Dealer extends Thread {
         while(!Thread.currentThread().isInterrupted()) {
             try {
                 synchronized (this) {
-                    sleep(timeForCar * 1000);
+                    wait(timeForCar * 1000);
                 }
                 carStore.addWaitingNum();
              //   System.out.print("Dealer add waiting num\n");
